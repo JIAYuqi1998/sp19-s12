@@ -79,10 +79,24 @@ public class IntList {
      * Returns a list consisting of the elements of A followed by the
      * *  elements of B.  May modify items of A. Don't use 'new'.
      */
-
+    public static void addLast(IntList L, int x){
+        while(L.rest != null){
+            L = L.rest;
+        }
+        L.rest = new IntList(x,null);
+    }
     public static IntList dcatenate(IntList A, IntList B) {
-        //TODO:  fill in method
-        return null;
+//        while(B.rest!= null){
+//            addLast(A, B.first);
+//            B = B.rest;
+//        }
+//        addLast(A, B.first);
+        if(B.rest == null){
+            addLast(A, B.first);
+            return A;
+        }
+        addLast(A,B.first);
+        return dcatenate(A,B.rest);
     }
 
     /**
@@ -90,8 +104,25 @@ public class IntList {
      * * elements of B.  May NOT modify items of A.  Use 'new'.
      */
     public static IntList catenate(IntList A, IntList B) {
-        //TODO:  fill in method
-        return null;
+        IntList temp = new IntList();
+        boolean flag = true;
+        while(A.rest != null){
+            if(flag){
+                temp.first = A.first;
+                flag = false;
+                A = A.rest;
+            }
+            else{
+                addLast(temp, A.first);
+                A = A.rest;}
+        }
+        addLast(temp,A.first);
+        while(B.rest!= null){
+            addLast(temp, B.first);
+            B = B.rest;
+        }
+        addLast(temp, B.first);
+        return temp;
     }
 
 

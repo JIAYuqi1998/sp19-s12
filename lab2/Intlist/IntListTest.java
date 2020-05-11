@@ -26,7 +26,12 @@ public class IntListTest {
         IntList.dSquareList(L);
         assertEquals(IntList.of(1, 4, 9), L);
     }
-
+//    @Test
+//    public void testAddLast() {
+//        IntList L = IntList.of(1, 2, 3);
+//        IntList.addLast(L,4);
+//        assertEquals(IntList.of(1, 2, 3, 4), L);
+//    }
     /**
      * Do not use the new keyword in your tests. You can create
      * lists using the handy IntList.of method.
