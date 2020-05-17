@@ -79,30 +79,18 @@ public class IntList {
      * Returns a list consisting of the elements of A followed by the
      * *  elements of B.  May modify items of A. Don't use 'new'.
      */
-    public static void addLast(IntList L, int x){
-        while(L.rest != null){
-            L = L.rest;
-        }
-        L.rest = new IntList(x,null);
-    }
+
     public static IntList dcatenate(IntList A, IntList B) {
+
         if (A == null){
             return B;
         }
-        if (B == null){
-            return A;
+        IntList p = A;
+        while (p.rest != null){
+            p = p.rest;
         }
-//        while(B.rest!= null){
-//            addLast(A, B.first);
-//            B = B.rest;
-//        }
-//        addLast(A, B.first);
-        if(B.rest == null){
-            addLast(A, B.first);
-            return A;
-        }
-        addLast(A,B.first);
-        return dcatenate(A,B.rest);
+        p.rest = B;
+        return A;
     }
 
     /**
@@ -110,39 +98,48 @@ public class IntList {
      * * elements of B.  May NOT modify items of A.  Use 'new'.
      */
     public static IntList catenate(IntList A, IntList B) {
-        if (A == null){
+        if (A == null) {
             return B;
         }
-        if (B == null){
-            return A;
-        }
-        IntList temp = new IntList();
-        boolean flag = true;
-        while(A.rest != null){
-            if(flag){
-                temp.first = A.first;
-                flag = false;
-                A = A.rest;
-            }
-            else{
-                addLast(temp, A.first);
-                A = A.rest;}
-        }
-        addLast(temp,A.first);
-        while(B.rest!= null){
-            addLast(temp, B.first);
-            B = B.rest;
-        }
-        addLast(temp, B.first);
-        return temp;
+        return new IntList(A.first, catenate(A.rest, B));
     }
 
 
 
 
+/*
+    public static IntList squre(IntList L){
+//        iteratively
+        IntList temp = new IntList(L.first*L.first,null);
+        IntList final_output = temp;
+        while(L.rest != null){
+            L = L.rest;
+            temp.rest = new IntList(L.first*L.first,null);
+            temp = temp.rest;
+        }
+        return final_output;
+//        Recursively
+*/
+/*        if (L.rest == null) {
+            return new IntList(L.first * L.first, L.rest);
+        }
+        else return new IntList(L.first*L.first,squre(L.rest));*//*
 
+    }
 
-
+    public static void main(String[] args) {
+        IntList A = IntList.of(1, 2, 3);
+        IntList B = squre(A);
+    }
+    public static IntList squareDesctructive(IntList L){
+        L.first = L.first * L.first;
+        if (L.rest == null) {
+            return L;
+        }
+        else L.rest = squre(L.rest);
+        return L;
+    }
+*/
 
 
 
