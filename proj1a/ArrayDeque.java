@@ -1,41 +1,39 @@
 @SuppressWarnings("unchecked")
 public class ArrayDeque<T> {
     T[] a;
-    int size;
-    int nextFirst;
-    int nextLast;
-    double UsageFactor =  0.25;
-    boolean flag1 = true;
-    boolean flag2 = true;
+    private int size;
+    private int nextFirst;
+    private int nextLast;
+    private double usageFactor =  0.25;
+    private boolean flag1 = true;
+    private boolean flag2 = true;
     public ArrayDeque() {
         size = 0;
         a = (T[]) new Object[8];
         nextFirst = 3;
         nextLast = 4;
     }
-    public ArrayDeque(ArrayDeque other) {
-    }
     public void addFirst(T item) {
         if (nextFirst == nextLast) {
             a = (T[]) this.resize();
-            nextFirst = a.length - size -1 + nextFirst;
+            nextFirst = a.length - size - 1 + nextFirst;
         }
         size = size + 1;
         a[nextFirst] = item;
         nextFirst = nextFirst - 1;
-        if(nextFirst < 0) {
+        if (nextFirst < 0) {
             nextFirst = a.length - 1;
         }
     }
     public void addLast(T item) {
         if (nextFirst == nextLast) {
             a = (T[]) this.resize();
-            nextFirst = a.length - size;
+            nextFirst = a.length - size + nextFirst -1;
         }
         size = size + 1;
         a[nextLast] = item;
         nextLast = nextLast + 1;
-        if (nextLast == a.length -1) {
+        if (nextLast == a.length ) {
             nextLast = 0;
         }
     }
@@ -56,24 +54,25 @@ public class ArrayDeque<T> {
                 if (ptr == a.length) {
                     ptr = 0;
                 }
-            }System.out.println();
+            }
+            System.out.println();
         }
     }
     public T removeFirst() {
         if (size == 0) {
             System.out.println("Empty List");
             return null;
-        }else {
-            if((double)size/a.length < UsageFactor && a.length > 10) {
-                int ori_len = a.length;
-                int des_len = (int) (ori_len - size)/2 + size;
-                Object[] arr = new Object[des_len];
+        } else {
+            if ((double) size / a.length < usageFactor && a.length > 10) {
+                int oriLen = a.length;
+                int desLen = (int) (oriLen - size) / 2 + size;
+                Object[] arr = new Object[desLen];
                 if (flag1) {
-                    System.arraycopy(this.a,0,arr,0,nextLast);
-                    System.arraycopy(this.a, nextFirst + 1, arr, des_len - ori_len + nextFirst + 1,
-                            ori_len - nextFirst - 1);
+                    System.arraycopy(this.a, 0, arr, 0, nextLast);
+                    System.arraycopy(this.a, nextFirst + 1, arr, desLen - oriLen + nextFirst + 1,
+                            oriLen - nextFirst - 1);
                     this.a = (T[]) arr;
-                    nextFirst = des_len - ori_len + nextFirst;
+                    nextFirst = desLen - oriLen + nextFirst;
                 } else {
                     System.arraycopy(this.a, nextFirst + 1, arr, nextFirst + 1,
                             nextLast - nextFirst - 1);
@@ -81,7 +80,7 @@ public class ArrayDeque<T> {
                 }
             }
             nextFirst = nextFirst + 1;
-            if (nextFirst == a.length){
+            if (nextFirst == a.length) {
                 nextFirst = 0;
                 flag1 = false;
             }
@@ -93,44 +92,44 @@ public class ArrayDeque<T> {
         if (size == 0) {
             System.out.println("Empty List");
             return null;
-        }else {
-            if((double)size/a.length < UsageFactor && a.length > 10) {
-                int ori_len = a.length;
-                int des_len = (int) (ori_len - size)/2 + size;
-                Object[] arr = new Object[des_len];
+        } else {
+            if((double) size / a.length < usageFactor && a.length > 10) {
+                int oriLen = a.length;
+                int desLen = (int) (oriLen - size)/2 + size;
+                Object[] arr = new Object[desLen];
                 if (flag2) {
-                    System.arraycopy(this.a,0,arr,0,nextLast);
-                    System.arraycopy(this.a, nextFirst + 1, arr, des_len - ori_len + nextFirst + 1,
-                            ori_len - nextFirst - 1);
+                    System.arraycopy(this.a, 0, arr, 0, nextLast);
+                    System.arraycopy(this.a, nextFirst + 1, arr, desLen - oriLen + nextFirst + 1,
+                            oriLen - nextFirst - 1);
                     this.a = (T[]) arr;
-                    nextFirst = des_len - ori_len + nextFirst;
+                    nextFirst = desLen - oriLen + nextFirst;
                 } else {
-                    System.arraycopy(this.a, nextFirst + 1, arr, des_len - nextLast + nextFirst,
+                    System.arraycopy(this.a, nextFirst + 1, arr, desLen - nextLast + nextFirst,
                             nextLast - nextFirst);
                     this.a = (T[]) arr;
-                    nextFirst = des_len - nextLast + nextFirst - 1;
-                    nextLast = des_len - 1;
+                    nextFirst = desLen - nextLast + nextFirst - 1;
+                    nextLast = desLen - 1;
                 }
             }
             nextLast = nextLast - 1;
-            if (nextLast < 0){
+            if (nextLast < 0) {
                 nextLast = a.length - 1;
-                flag2= false;
+                flag2 = false;
             }
             size = size - 1;
             return a[nextLast];
         }
     }
-    public T get(int index){
+    public T get(int index) {
         return a[nextFirst + index + 1];
     }
-    private Object[] resize(){
-        int ori_len = a.length;
-        int des_len = (int) (ori_len/ this.UsageFactor);
-        Object[] arr = new Object[des_len];
+    private Object[] resize() {
+        int oriLen = a.length;
+        int desLen = (int) (oriLen / this.usageFactor);
+        Object[] arr = new Object[desLen];
         System.arraycopy(this.a, 0, arr, 0, nextFirst + 1);
-        System.arraycopy(this.a, nextFirst + 1, arr, des_len - ori_len + nextFirst + 1,
-                ori_len - nextFirst - 1);
+        System.arraycopy(this.a, nextFirst + 1, arr, desLen - oriLen + nextFirst + 1,
+                oriLen - nextFirst - 1);
         return arr;
     }
 }

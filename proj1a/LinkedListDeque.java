@@ -1,41 +1,41 @@
-@SuppressWarnings("ALL")
+@SuppressWarnings("unchecked")
 public class LinkedListDeque<T> {
-    public class stuffnode{
-        public stuffnode previous;
-        public T item;
-        public stuffnode next;
-        public stuffnode( stuffnode p, T first, stuffnode n){
+    public class Stuffnode {
+        private Stuffnode previous;
+        private T item;
+        private Stuffnode next;
+        public Stuffnode(Stuffnode p, T first, Stuffnode n) {
             this.item = first;
             this.next = n;
             this.previous = p;
         }
     }
-    private stuffnode Frontsentinel = new stuffnode (null, (T) "fsentinel",null);
-    private stuffnode Backsentinel = new stuffnode(null, (T) "bsentinel", null);
+    private Stuffnode frontSentinel = new Stuffnode(null, (T) "fsentinel", null);
+    private Stuffnode backSentinel = new Stuffnode(null, (T) "bsentinel", null);
     private int size;
     public LinkedListDeque() {
-        this.Frontsentinel.next = this.Backsentinel;
-        this.Backsentinel.previous = this.Frontsentinel;
+        this.frontSentinel.next = this.backSentinel;
+        this.backSentinel.previous = this.frontSentinel;
         this.size = 0;
     }
     public LinkedListDeque(LinkedListDeque other) {
-        this.Frontsentinel.next = this.Backsentinel;
-        this.Backsentinel.previous = this.Frontsentinel;
-        for (int i = 0; i < other.size(); i += 1){
+        this.frontSentinel.next = this.backSentinel;
+        this.backSentinel.previous = this.frontSentinel;
+        for (int i = 0; i < other.size(); i += 1) {
             this.addLast((T) other.get(i));
         }
     }
     public void addFirst(T item) {
-        stuffnode addnode = new stuffnode(null,item, this.Frontsentinel.next);
-        this.Frontsentinel.next = addnode;
-        addnode.previous = this.Frontsentinel;
+        Stuffnode addnode = new Stuffnode(null, item, this.frontSentinel.next);
+        this.frontSentinel.next = addnode;
+        addnode.previous = this.frontSentinel;
         addnode.next.previous = addnode;
         this.size += 1;
     }
     public void addLast(T item) {
-        stuffnode addnode = new stuffnode(this.Backsentinel.previous ,item,null);
-        this.Backsentinel.previous = addnode;
-        addnode.next = this.Backsentinel;
+        Stuffnode addnode = new Stuffnode(this.backSentinel.previous , item, null);
+        this.backSentinel.previous = addnode;
+        addnode.next = this.backSentinel;
         addnode.previous.next = addnode;
         this.size += 1;
     }
@@ -46,50 +46,51 @@ public class LinkedListDeque<T> {
         return this.size;
     }
     public void printDeque() {
-        if(this.Frontsentinel.next == null) {
+        if (this.frontSentinel.next == null) {
             System.out.println("Empty Query");
-        }else {
-            stuffnode ptr = this.Frontsentinel.next;
-            while(ptr.next!= this.Backsentinel) {
+        } else {
+            Stuffnode ptr = this.frontSentinel.next;
+            while (ptr.next != this.backSentinel) {
                 System.out.print(ptr.item + " ");
                 ptr = ptr.next;
-            }System.out.println(ptr.item + " ");
+            } System.out.println(ptr.item + " ");
         }
     }
     @SuppressWarnings("UnusedReturnValue")
     public Object removeFirst() {
-        this.Frontsentinel.next = this.Frontsentinel.next.next;
-        this.Frontsentinel.next.previous = this.Frontsentinel;
+        this.frontSentinel.next = this.frontSentinel.next.next;
+        this.frontSentinel.next.previous = this.frontSentinel;
         this.size = this.size - 1;
-        return this.Frontsentinel.next.item;
+        return this.frontSentinel.next.item;
     }
     @SuppressWarnings("unused")
     public Object removeLast() {
-        this.Backsentinel.previous = this.Backsentinel.previous.previous;
-        this.Backsentinel.previous.next = this.Backsentinel;
-        this.size = this.size -1;
-        return this.Backsentinel.previous.item;
+        this.backSentinel.previous = this.backSentinel.previous.previous;
+        this.backSentinel.previous.next = this.backSentinel;
+        this.size = this.size - 1;
+        return this.backSentinel.previous.item;
     }
     public Object get(int index) {
-        stuffnode ptr = this.Frontsentinel.next;
-        for (int i = 0; i != index; i ++) {
+        Stuffnode ptr = this.frontSentinel.next;
+        for (int i = 0; i != index; i++) {
             ptr = ptr.next;
         }
         return ptr.item;
     }
-    public Object getHelper( stuffnode helper, int index, int size, int constant){
-        if (index + size == constant){
+    public Object getHelper(Stuffnode helper, int index, int s, int constant) {
+        if (index + s == constant) {
             return helper.item;
-        }else {
-            return this.getHelper(helper.next, index, size - 1 , constant);
+        } else {
+            return this.getHelper(helper.next, index, s - 1, constant);
         }
     }
-    public Object getRecursive( int index) {
-        if (index > this.size -1){
+    public Object getRecursive(int index) {
+        if (index > this.size - 1) {
             System.out.println("Out of Range");
             return null;
-        }else {
-             Object output = this.getHelper(this.Frontsentinel.next, index, this.size - 1, this.size - 1);
+        } else {
+            Object output = this.getHelper(this.frontSentinel.next, index,
+                    this.size - 1, this.size - 1);
             return output;
         }
     }

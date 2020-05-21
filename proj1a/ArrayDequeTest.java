@@ -84,7 +84,7 @@ public class ArrayDequeTest {
 /*        addIsEmptySizeTest();
         addRemoveTest();*/
         ArrayDeque<Integer> test = new ArrayDeque<>();
-        test.addFirst(11);
+/*        test.addFirst(11);
         test.addFirst(10);
         test.addFirst(9);
         test.addFirst(8);
@@ -94,9 +94,12 @@ public class ArrayDequeTest {
         test.addFirst(4);
         test.addFirst(3);
         test.addFirst(2);
-        test.addFirst(1);
-        test.addFirst(0);
-        int a = (int) test.get(4);
+        test.addFirst(1);*/
+        test.addLast(0);
+        test.addLast(1);
+        test.addLast(2);
+        int what = test.removeLast();
+        int a = (int) test.get(0);
         test.printDeque();
     }
 } 
