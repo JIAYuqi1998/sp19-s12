@@ -1,5 +1,6 @@
+@SuppressWarnings("ALL")
 public class LinkedListDeque<T> {
-    public class stuffnode<T>{
+    public class stuffnode{
         public stuffnode previous;
         public T item;
         public stuffnode next;
@@ -9,8 +10,8 @@ public class LinkedListDeque<T> {
             this.previous = p;
         }
     }
-    private stuffnode Frontsentinel = new stuffnode<> (null,"fsentinel",null);
-    private stuffnode Backsentinel = new stuffnode<>(null, "bsentinel", null);
+    private stuffnode Frontsentinel = new stuffnode (null, (T) "fsentinel",null);
+    private stuffnode Backsentinel = new stuffnode(null, (T) "bsentinel", null);
     private int size;
     public LinkedListDeque() {
         this.Frontsentinel.next = this.Backsentinel;
@@ -55,12 +56,14 @@ public class LinkedListDeque<T> {
             }System.out.println(ptr.item + " ");
         }
     }
+    @SuppressWarnings("UnusedReturnValue")
     public Object removeFirst() {
         this.Frontsentinel.next = this.Frontsentinel.next.next;
         this.Frontsentinel.next.previous = this.Frontsentinel;
         this.size = this.size - 1;
         return this.Frontsentinel.next.item;
     }
+    @SuppressWarnings("unused")
     public Object removeLast() {
         this.Backsentinel.previous = this.Backsentinel.previous.previous;
         this.Backsentinel.previous.next = this.Backsentinel;
