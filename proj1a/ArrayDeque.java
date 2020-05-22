@@ -1,6 +1,6 @@
 @SuppressWarnings("unchecked")
 public class ArrayDeque<T> {
-    T[] a;
+    private T[] a;
     private int size;
     private int nextFirst;
     private int nextLast;
@@ -28,12 +28,12 @@ public class ArrayDeque<T> {
     public void addLast(T item) {
         if (nextFirst == nextLast) {
             a = (T[]) this.resize();
-            nextFirst = a.length - size + nextFirst -1;
+            nextFirst = a.length - size + nextFirst - 1;
         }
         size = size + 1;
         a[nextLast] = item;
         nextLast = nextLast + 1;
-        if (nextLast == a.length ) {
+        if (nextLast == a.length) {
             nextLast = 0;
         }
     }
@@ -93,9 +93,9 @@ public class ArrayDeque<T> {
             System.out.println("Empty List");
             return null;
         } else {
-            if((double) size / a.length < usageFactor && a.length > 10) {
+            if ((double) size / a.length < usageFactor && a.length > 10) {
                 int oriLen = a.length;
-                int desLen = (int) (oriLen - size)/2 + size;
+                int desLen = (int) (oriLen - size) / 2 + size;
                 Object[] arr = new Object[desLen];
                 if (flag2) {
                     System.arraycopy(this.a, 0, arr, 0, nextLast);
@@ -121,6 +121,9 @@ public class ArrayDeque<T> {
         }
     }
     public T get(int index) {
+        if (nextFirst + index + 1 >= a.length) {
+            return a[nextFirst + index - a.length + 1];
+        }
         return a[nextFirst + index + 1];
     }
     private Object[] resize() {

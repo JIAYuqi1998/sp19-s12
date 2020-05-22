@@ -18,13 +18,13 @@ public class LinkedListDeque<T> {
         this.backSentinel.previous = this.frontSentinel;
         this.size = 0;
     }
-    public LinkedListDeque(LinkedListDeque other) {
+/*    public LinkedListDeque(LinkedListDeque other) {
         this.frontSentinel.next = this.backSentinel;
         this.backSentinel.previous = this.frontSentinel;
         for (int i = 0; i < other.size(); i += 1) {
             this.addLast((T) other.get(i));
         }
-    }
+    }*/
     public void addFirst(T item) {
         Stuffnode addnode = new Stuffnode(null, item, this.frontSentinel.next);
         this.frontSentinel.next = addnode;
@@ -33,7 +33,7 @@ public class LinkedListDeque<T> {
         this.size += 1;
     }
     public void addLast(T item) {
-        Stuffnode addnode = new Stuffnode(this.backSentinel.previous , item, null);
+        Stuffnode addnode = new Stuffnode(this.backSentinel.previous, item, null);
         this.backSentinel.previous = addnode;
         addnode.next = this.backSentinel;
         addnode.previous.next = addnode;
@@ -56,42 +56,40 @@ public class LinkedListDeque<T> {
             } System.out.println(ptr.item + " ");
         }
     }
-    @SuppressWarnings("UnusedReturnValue")
-    public Object removeFirst() {
+    public T removeFirst() {
         this.frontSentinel.next = this.frontSentinel.next.next;
         this.frontSentinel.next.previous = this.frontSentinel;
         this.size = this.size - 1;
         return this.frontSentinel.next.item;
     }
-    @SuppressWarnings("unused")
-    public Object removeLast() {
+    public T removeLast() {
         this.backSentinel.previous = this.backSentinel.previous.previous;
         this.backSentinel.previous.next = this.backSentinel;
         this.size = this.size - 1;
         return this.backSentinel.previous.item;
     }
-    public Object get(int index) {
+    public T get(int index) {
         Stuffnode ptr = this.frontSentinel.next;
         for (int i = 0; i != index; i++) {
             ptr = ptr.next;
         }
         return ptr.item;
     }
-    public Object getHelper(Stuffnode helper, int index, int s, int constant) {
+    public T getHelper(Stuffnode helper, int index, int s, int constant) {
         if (index + s == constant) {
             return helper.item;
         } else {
             return this.getHelper(helper.next, index, s - 1, constant);
         }
     }
-    public Object getRecursive(int index) {
+    public T getRecursive(int index) {
         if (index > this.size - 1) {
             System.out.println("Out of Range");
             return null;
         } else {
-            Object output = this.getHelper(this.frontSentinel.next, index,
+            return this.getHelper(this.frontSentinel.next, index,
                     this.size - 1, this.size - 1);
-            return output;
         }
     }
 }
+
