@@ -67,24 +67,17 @@ public class ArrayDeque<T> {
                 int oriLen = a.length;
                 int desLen = (int) (oriLen - size) / 2 + size;
                 Object[] arr = new Object[desLen];
-                if (flag1) {
-                    if(nextFirst > nextLast) {
-                        System.arraycopy(this.a, 0, arr, 0, nextLast);
-                        System.arraycopy(this.a, nextFirst + 1, arr, desLen - oriLen + nextFirst + 1,
-                                oriLen - nextFirst - 1);
-                        this.a = (T[]) arr;
-                        nextFirst = desLen - oriLen + nextFirst;
-                    } else {
-                        System.arraycopy(this.a, nextFirst + 1, arr, desLen - nextLast + nextFirst + 1,
-                                nextLast - nextFirst - 1);
-                        this.a = (T[]) arr;
-                        nextFirst = desLen - nextLast + nextFirst;
-                        nextLast = 0;
-                    }
-                } else {
-                    System.arraycopy(this.a, nextFirst + 1, arr, nextFirst + 1,
-                            nextLast - nextFirst - 1);
+                if (nextFirst < nextLast) {
+                    System.arraycopy(this.a, nextFirst + 1, arr, desLen - size, size);
                     this.a = (T[]) arr;
+                    nextLast = 0;
+                    nextFirst = desLen - size - 1;
+                } else {
+                    System.arraycopy(this.a, 0, arr, 0, nextLast);
+                    System.arraycopy(this.a, nextFirst + 1, arr, desLen - size + nextLast,
+                            size - nextLast);
+                    this.a = (T[]) arr;
+                    nextFirst = desLen - size + nextLast - 1;
                 }
             }
             nextFirst = nextFirst + 1;
@@ -107,6 +100,7 @@ public class ArrayDeque<T> {
                 Object[] arr = new Object[desLen];
                 if (nextFirst < nextLast) {
                     System.arraycopy(this.a, nextFirst + 1, arr, desLen - size, size);
+                    this.a = (T[]) arr;
                     nextLast = 0;
                     nextFirst = desLen - size - 1;
                 } else {
