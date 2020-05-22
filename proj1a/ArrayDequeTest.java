@@ -85,5 +85,28 @@ public class ArrayDequeTest {
         System.out.println("Running tests.\n");
 /*        addIsEmptySizeTest();
         addRemoveTest();*/
+        ArrayDeque ArrayDeque = new ArrayDeque();
+        ArrayDeque.addLast(0);
+        ArrayDeque.removeFirst();
+        ArrayDeque.addLast(2);
+        ArrayDeque.addFirst(3);
+        ArrayDeque.addLast(4);
+        ArrayDeque.addLast(5);
+        ArrayDeque.get(3);
+        ArrayDeque.get(2);
+        ArrayDeque.addLast(8);
+        ArrayDeque.addLast(9);
+        ArrayDeque.get(2);
+        ArrayDeque.addFirst(11);
+        ArrayDeque.removeLast();
+        ArrayDeque.removeLast();
+        ArrayDeque.addFirst(14);
+        ArrayDeque.addFirst(15);
+        ArrayDeque.removeFirst();
+        ArrayDeque.addFirst(17);
+        ArrayDeque.addFirst(18);
+        ArrayDeque.removeLast();
+        ArrayDeque.get(6);
+        ArrayDeque.removeFirst();
     }
 }

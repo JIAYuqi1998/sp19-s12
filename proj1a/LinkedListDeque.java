@@ -1,6 +1,6 @@
 @SuppressWarnings("unchecked")
 public class LinkedListDeque<T> {
-    public class Stuffnode {
+    private class Stuffnode {
         private Stuffnode previous;
         private T item;
         private Stuffnode next;
@@ -57,16 +57,18 @@ public class LinkedListDeque<T> {
         }
     }
     public T removeFirst() {
+        T a = this.frontSentinel.next.item;
         this.frontSentinel.next = this.frontSentinel.next.next;
         this.frontSentinel.next.previous = this.frontSentinel;
         this.size = this.size - 1;
-        return this.frontSentinel.next.item;
+        return a;
     }
     public T removeLast() {
+        T b = this.backSentinel.previous.item;
         this.backSentinel.previous = this.backSentinel.previous.previous;
         this.backSentinel.previous.next = this.backSentinel;
         this.size = this.size - 1;
-        return this.backSentinel.previous.item;
+        return b;
     }
     public T get(int index) {
         Stuffnode ptr = this.frontSentinel.next;
@@ -75,7 +77,7 @@ public class LinkedListDeque<T> {
         }
         return ptr.item;
     }
-    public T getHelper(Stuffnode helper, int index, int s, int constant) {
+    private T getHelper(Stuffnode helper, int index, int s, int constant) {
         if (index + s == constant) {
             return helper.item;
         } else {
