@@ -57,18 +57,26 @@ public class LinkedListDeque<T> {
         }
     }
     public T removeFirst() {
-        T a = this.frontSentinel.next.item;
-        this.frontSentinel.next = this.frontSentinel.next.next;
-        this.frontSentinel.next.previous = this.frontSentinel;
-        this.size = this.size - 1;
-        return a;
+        if (size == 0) {
+            return null;
+        } else {
+            T a = this.frontSentinel.next.item;
+            this.frontSentinel.next = this.frontSentinel.next.next;
+            this.frontSentinel.next.previous = this.frontSentinel;
+            this.size = this.size - 1;
+            return a;
+        }
     }
     public T removeLast() {
-        T b = this.backSentinel.previous.item;
-        this.backSentinel.previous = this.backSentinel.previous.previous;
-        this.backSentinel.previous.next = this.backSentinel;
-        this.size = this.size - 1;
-        return b;
+        if (size == 0) {
+            return null;
+        } else {
+            T b = this.backSentinel.previous.item;
+            this.backSentinel.previous = this.backSentinel.previous.previous;
+            this.backSentinel.previous.next = this.backSentinel;
+            this.size = this.size - 1;
+            return b;
+        }
     }
     public T get(int index) {
         Stuffnode ptr = this.frontSentinel.next;
