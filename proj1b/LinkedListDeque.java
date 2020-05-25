@@ -1,5 +1,5 @@
 @SuppressWarnings("unchecked")
-public class LinkedListDeque<T> implements Deque<T>{
+public class LinkedListDeque<T> implements Deque<T> {
     private class Stuffnode {
         private Stuffnode previous;
         private T item;
