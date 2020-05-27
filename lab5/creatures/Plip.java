@@ -10,6 +10,8 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.Map;
 
+import static huglife.HugLifeUtils.randomEntry;
+
 /**
  * An implementation of a motile pacifist photosynthesizer.
  *
@@ -35,9 +37,9 @@ public class Plip extends Creature {
      */
     public Plip(double e) {
         super("plip");
-        r = 0;
+        r = 99;
         g = 0;
-        b = 0;
+        b = 76;
         energy = e;
     }
 
@@ -57,7 +59,7 @@ public class Plip extends Creature {
      * that you get this exactly correct.
      */
     public Color color() {
-        g = 63;
+        g = (int) (63 + this.energy * 96);
         return color(r, g, b);
     }
 
@@ -65,7 +67,6 @@ public class Plip extends Creature {
      * Do nothing with C, Plips are pacifists.
      */
     public void attack(Creature c) {
-        // do nothing.
     }
 
     /**
@@ -74,7 +75,10 @@ public class Plip extends Creature {
      * private static final variable. This is not required for this lab.
      */
     public void move() {
-        // TODO
+        this.energy -= 0.15;
+        if (this.energy < 0) {
+            this.energy = 0;
+        }
     }
 
 
@@ -82,7 +86,10 @@ public class Plip extends Creature {
      * Plips gain 0.2 energy when staying due to photosynthesis.
      */
     public void stay() {
-        // TODO
+        this.energy += 0.2;
+        if (this.energy > 2) {
+            this.energy = 2;
+        }
     }
 
     /**
@@ -91,7 +98,13 @@ public class Plip extends Creature {
      * Plip.
      */
     public Plip replicate() {
-        return this;
+        this.energy = this.energy / 2;
+        Plip newP = new Plip();
+        newP.energy = this.energy;
+        newP.r = this.r;
+        newP.g = this.g;
+        newP.b = this.b;
+        return newP;
     }
 
     /**
@@ -111,20 +124,38 @@ public class Plip extends Creature {
         // Rule 1
         Deque<Direction> emptyNeighbors = new ArrayDeque<>();
         boolean anyClorus = false;
-        // TODO
+        Boolean noEmpty = true;
         // (Google: Enhanced for-loop over keys of NEIGHBORS?)
-        // for () {...}
-
-        if (false) { // FIXME
-            // TODO
+        // if one of the occupant is empty, add the direction into
+        // the deque then the noEmpty is false.
+        for (Direction key : neighbors.keySet()) {
+            if (neighbors.get(key).name().equals("empty")) {
+                emptyNeighbors.add(key);
+                noEmpty = false;
+            }
         }
-
-        // Rule 2
+        // if there is no empty room, stay.
+        if (noEmpty) {
+            //stay();
+            return new Action(Action.ActionType.STAY);
+        } else {
+            // Rule 2
+            if (energy > 1) {
+                //Plip newPlip = replicate();
+                Direction randomDirR = randomEntry(emptyNeighbors);
+                //neighbors.put(randomDirR, newPlip);
+                return new Action(Action.ActionType.REPLICATE, randomDirR);
+            } else if (anyClorus && Math.random() < 0.5) {
+                Direction randomDirM = randomEntry(emptyNeighbors);
+                return new Action(Action.ActionType.MOVE, randomDirM);
+            }
+            return new Action(Action.ActionType.STAY);
+        }
         // HINT: randomEntry(emptyNeighbors)
 
         // Rule 3
 
         // Rule 4
-        return new Action(Action.ActionType.STAY);
+
     }
 }
