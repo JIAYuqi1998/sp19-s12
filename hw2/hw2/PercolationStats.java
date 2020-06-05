@@ -21,7 +21,7 @@ public class PercolationStats {
                     break;
                 }
             }
-            threshold[i] = (1.0*ipf.numberOfOpenSites()) / N * N;
+            threshold[i] = (1.0*ipf.numberOfOpenSites()) / (N * N);
 
         }
         // generate random position; open the position; repeat until percolates.
