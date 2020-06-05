@@ -6,8 +6,8 @@ import static edu.princeton.cs.algs4.StdRandom.uniform;
 
 
 public class PercolationStats {
-    double[] threshold;
-    Percolation grid;
+    private double[] threshold;
+    private Percolation grid;
     // perform T independent experiments on an N-by-N grid
     public PercolationStats(int N, int T, PercolationFactory pf) {
         if (N < 0 || T < 0) {

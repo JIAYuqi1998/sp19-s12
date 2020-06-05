@@ -5,9 +5,9 @@ import java.lang.IndexOutOfBoundsException;
 import java.lang.IllegalArgumentException;
 
 public class Percolation {
-    WeightedQuickUnionUF grid;
-    int size;
-    boolean[] status;
+    private WeightedQuickUnionUF grid;
+    private int size;
+    private boolean[] status;
     //use status to track whether the site is open or not.
     // create N-by-N grid, with all sites initially blocked
     public Percolation(int N) {
@@ -38,6 +38,14 @@ public class Percolation {
             return;
         }
         status[xyTo1D(row, col)] = true;
+        // connect with the top virtual item
+        if (row == 0) {
+            grid.union(xyTo1D(row, col), 0);
+        }
+        // connect with the bottom virtual item
+        if (row == size - 1) {
+            grid.union(xyTo1D(row, col), size * size + 1);
+        }
         //up
         if (row - 1 >= 0) {
             if (status[xyTo1D(row - 1, col)]) {
@@ -77,7 +85,7 @@ public class Percolation {
         if (row < 0 || row > size - 1 || col < 0 || col > size - 1) {
             throw new IndexOutOfBoundsException();
         }
-        return grid.connected(0, xyTo1D(row, col));
+        return status[xyTo1D(row, col)];
     }
 
     // number of open sites
@@ -98,14 +106,15 @@ public class Percolation {
 
     // use for unit testing (not required, but keep this here for the autograder)
     public static void main(String[] args) {
-        Percolation test = new Percolation(5);
-        test.open(0, 1);
-        test.open(3, 2);
+        Percolation test = new Percolation(1);
+        System.out.println(test.isFull(0,0));
+        test.open(0, 0);
+/*        test.open(3, 2);
         test.open(3, 4);
         test.open(2, 2);
         test.open(2, 1);
         test.open(1, 1);
-        test.open(4, 2);
+        test.open(4, 2);*/
         boolean returnValue = test.percolates();
         System.out.println(returnValue);
     }
