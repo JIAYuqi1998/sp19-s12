@@ -1,7 +1,5 @@
 package hw2;
-import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 import edu.princeton.cs.introcs.StdStats;
-
 import static edu.princeton.cs.algs4.StdRandom.uniform;
 
 
