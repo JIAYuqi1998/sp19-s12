@@ -14,20 +14,18 @@ public class PercolationStats {
             throw new IllegalArgumentException();
         }
         threshold = new double[T];
-        for (int i = 0; i < N; i++) {
+        for (int i = 0; i < T; i++) {
             grid[i] = pf.make(N);
-            for (int j = 0; i < T; i++) {
-                int thre = 0;
-                while (true) {
-                    int col = uniform(0, N);
-                    int row = uniform(0, N);
-                    grid[i].open(row, col);
-                    thre += 1;
-                    if (grid[i].percolates()) {
-                        break;
-                    }
+            int thre = 0;
+            while (true) {
+                int col = uniform(0, N);
+                int row = uniform(0, N);
+                grid[i].open(row, col);
+                thre += 1;
+                if (grid[i].percolates()) {
+                    break;
                 }
-                threshold[j] = thre;
+                threshold[i] = thre;
             }
         }
         // generate random position; open the position; repeat until percolates.
