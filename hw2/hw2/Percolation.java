@@ -4,10 +4,21 @@ import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 import java.lang.IndexOutOfBoundsException;
 import java.lang.IllegalArgumentException;
 
+
+/* The virtual top node is connected to all open site in the first row.
+ * The virtual bottom node is connected to all open site in the last row.
+ * If the top node and the bottom node is connected, then the system percolate.
+ * Backwash: Some open sites cannot be connected to the top but can be connected to the bottom,
+ * since the top and the bottom are connected, those sites can still be connected to the top indirectly.
+ * Solution: maintain two WeightedQuickUnionUF, use the one which only has top node to check if is full,
+ * and use the other which have both to check if percolate
+ */
+
 public class Percolation {
     private WeightedQuickUnionUF grid;
     private int size;
     private boolean[] status;
+    private WeightedQuickUnionUF ufExcludeBottom;
     //use status to track whether the site is open or not.
     // create N-by-N grid, with all sites initially blocked
     public Percolation(int N) {
@@ -17,6 +28,7 @@ public class Percolation {
         grid = new WeightedQuickUnionUF(N * N + 2);
         size = N;
         status = new boolean[N * N + 1];
+        ufExcludeBottom = new WeightedQuickUnionUF(N * N + 1);
         java.util.Arrays.fill(status, false);
     }
 
@@ -37,6 +49,8 @@ public class Percolation {
         // connect with the top virtual item
         if (row == 0) {
             grid.union(xyTo1D(row, col), 0);
+            ufExcludeBottom.union(xyTo1D(row, col), 0);
+
         }
         // connect with the bottom virtual item
         if (row == size - 1) {
@@ -46,24 +60,28 @@ public class Percolation {
         if (row - 1 >= 0) {
             if (status[xyTo1D(row - 1, col)]) {
                 grid.union(xyTo1D(row, col), xyTo1D(row - 1, col));
+                ufExcludeBottom.union(xyTo1D(row, col), xyTo1D(row - 1, col));
             }
         }
         //below
         if (row + 1 <= size - 1) {
             if (status[xyTo1D(row + 1, col)]) {
                 grid.union(xyTo1D(row, col), xyTo1D(row + 1, col));
+                ufExcludeBottom.union(xyTo1D(row, col), xyTo1D(row + 1, col));
             }
         }
         //left
         if (col - 1 >= 0) {
             if (status[xyTo1D(row, col - 1)]) {
                 grid.union(xyTo1D(row, col), xyTo1D(row, col - 1));
+                ufExcludeBottom.union(xyTo1D(row, col), xyTo1D(row, col - 1));
             }
         }
         //right
         if (col + 1 <= size - 1) {
             if (status[xyTo1D(row, col + 1)]) {
                 grid.union(xyTo1D(row, col), xyTo1D(row, col + 1));
+                ufExcludeBottom.union(xyTo1D(row, col), xyTo1D(row, col + 1));
             }
         }
     }
@@ -81,7 +99,8 @@ public class Percolation {
         if (row < 0 || row > size - 1 || col < 0 || col > size - 1) {
             throw new IndexOutOfBoundsException();
         }
-        return grid.connected(xyTo1D(row, col), 0);
+
+        return ufExcludeBottom.connected(xyTo1D(row, col), 0);
     }
 
     // number of open sites

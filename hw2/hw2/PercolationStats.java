@@ -26,8 +26,9 @@ public class PercolationStats {
                 if (gridArray[i].percolates()) {
                     break;
                 }
-                threshold[i] = thre;
             }
+            threshold[i] = thre;
+
         }
         // generate random position; open the position; repeat until percolates.
 
@@ -51,5 +52,10 @@ public class PercolationStats {
     // high endpoint of 95% confidence interval
     public double confidenceHigh() {
         return mean() + 1.96 * stddev() / Math.sqrt(threshold.length);
+    }
+
+    public static void main(String[] args) {
+        PercolationStats test = new PercolationStats(20, 10, new PercolationFactory());
+        System.out.println(test.mean());
     }
 }
