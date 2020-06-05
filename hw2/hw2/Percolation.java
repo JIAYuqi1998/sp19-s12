@@ -15,10 +15,6 @@ public class Percolation {
             throw new IllegalArgumentException();
         }
         grid = new WeightedQuickUnionUF(N * N + 2);
-        for (int i = 0; i < N; i++) {
-            grid.union(0, i);
-            grid.union(N * N + 1, N * N - i);
-        }
         size = N;
         status = new boolean[N * N + 1];
         java.util.Arrays.fill(status, false);
@@ -85,7 +81,7 @@ public class Percolation {
         if (row < 0 || row > size - 1 || col < 0 || col > size - 1) {
             throw new IndexOutOfBoundsException();
         }
-        return status[xyTo1D(row, col)];
+        return grid.connected(xyTo1D(row, col), 0);
     }
 
     // number of open sites
@@ -106,7 +102,7 @@ public class Percolation {
 
     // use for unit testing (not required, but keep this here for the autograder)
     public static void main(String[] args) {
-        Percolation test = new Percolation(1);
+        Percolation test = new Percolation(10);
         System.out.println(test.isFull(0,0));
         test.open(0, 0);
 /*        test.open(3, 2);
