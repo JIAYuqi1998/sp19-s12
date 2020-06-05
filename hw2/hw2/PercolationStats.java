@@ -7,28 +7,31 @@ import static edu.princeton.cs.algs4.StdRandom.uniform;
 
 public class PercolationStats {
     private double[] threshold;
-    private Percolation grid;
+    private Percolation[] grid;
     // perform T independent experiments on an N-by-N grid
     public PercolationStats(int N, int T, PercolationFactory pf) {
-        if (N < 0 || T < 0) {
+        if (N <= 0 || T <= 0) {
             throw new IllegalArgumentException();
         }
-        grid = pf.make(N);
         threshold = new double[T];
-        // generate random position; open the position; repeat until percolates.
-        for (int i = 0; i < T; i++) {
-            int thre = 0;
-            while (true) {
-                int col = uniform(0, N);
-                int row = uniform(0, N);
-                grid.open(row, col);
-                thre += 1;
-                if (grid.percolates()) {
-                    break;
+        for (int i = 0; i < N; i++) {
+            grid[i] = pf.make(N);
+            for (int j = 0; i < T; i++) {
+                int thre = 0;
+                while (true) {
+                    int col = uniform(0, N);
+                    int row = uniform(0, N);
+                    grid[i].open(row, col);
+                    thre += 1;
+                    if (grid[i].percolates()) {
+                        break;
+                    }
                 }
+                threshold[j] = thre;
             }
-            threshold[i] = thre;
         }
+        // generate random position; open the position; repeat until percolates.
+
     }
 
     // sample mean of percolation threshold
