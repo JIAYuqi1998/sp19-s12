@@ -26,6 +26,7 @@ public class TestBSTMap {
             assertTrue( null != b.get("hi" + i) && (b.get("hi"+i).equals(1+i))
                         && b.containsKey("hi" + i));
         }
+        b.printInOrder();
         assertEquals(455, b.size());
         b.clear();
         assertEquals(0, b.size());
