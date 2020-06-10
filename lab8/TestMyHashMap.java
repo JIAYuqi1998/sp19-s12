@@ -1,5 +1,7 @@
 import static org.junit.Assert.*;
 import org.junit.Test;
+import org.w3c.dom.Node;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -84,11 +86,11 @@ public class TestMyHashMap {
     public void sanityKeySetTest() {
         MyHashMap<String, Integer> b = new MyHashMap<String, Integer>();
         HashSet<String> values = new HashSet<String>();
-        for (int i = 0; i < 455; i++) {
+        for (int i = 0; i < 10; i++) {
             b.put("hi" + i, 1);   
             values.add("hi" + i);
         }
-        assertEquals(455, b.size()); //keys are there
+        assertEquals(10, b.size()); //keys are there
         Set<String> keySet = b.keySet();
         assertTrue(values.containsAll(keySet));
         assertTrue(keySet.containsAll(values));
