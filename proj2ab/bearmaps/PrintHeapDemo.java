@@ -63,8 +63,27 @@ public class PrintHeapDemo {
 
 
     public static void main(String[] args) {
-        Integer[] example = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
+/*        Integer[] example = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
         printSimpleHeapDrawing(example);
-        printFancyHeapDrawing(example);
+        printFancyHeapDrawing(example);*/
+        ArrayHeapMinPQ minPQ = new ArrayHeapMinPQ();
+        minPQ.add(1,10.0);
+        minPQ.add(2,5.0);
+        minPQ.add(3,7.0);
+        minPQ.add(4,3.0);
+        minPQ.add(5,2.0);
+        minPQ.add(6,11.0);
+        minPQ.add(7,5.1);
+        minPQ.add(8,3.5);
+        minPQ.add(10,3.9);
+        minPQ.changePriority(1,1);
+        Integer[] test = minPQ.returnVal();
+        printSimpleHeapDrawing(test);
+        minPQ.removeSmallest();
+
+        test = minPQ.returnVal();
+        printSimpleHeapDrawing(test);
+
+
     }
 }
