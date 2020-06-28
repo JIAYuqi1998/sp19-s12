@@ -1,16 +1,32 @@
 import edu.princeton.cs.algs4.Queue;
+import java.util.concurrent.ThreadLocalRandom;
 
+import edu.princeton.cs.algs4.Quick;
+import org.junit.Assert;
 import org.junit.Test;
 
 public class TestSortAlgs {
 
     @Test
     public void testQuickSort() {
-
+        Queue quicksortQueue = new Queue();
+        for (int i = 0; i < 100; i++) {
+            int j = ThreadLocalRandom.current().nextInt(1, 1000 + 1);
+            quicksortQueue.enqueue(j);
+        }
+        QuickSort.quickSort(quicksortQueue);
+        Assert.assertTrue(isSorted(quicksortQueue));
     }
 
     @Test
     public void testMergeSort() {
+        Queue mergesortQueue = new Queue();
+        for (int i = 0; i < 100; i++) {
+            int j = ThreadLocalRandom.current().nextInt(1, 1000 + 1);
+            mergesortQueue.enqueue(j);
+        }
+        MergeSort.mergeSort(mergesortQueue);
+        Assert.assertTrue(isSorted(mergesortQueue));
 
     }
 
