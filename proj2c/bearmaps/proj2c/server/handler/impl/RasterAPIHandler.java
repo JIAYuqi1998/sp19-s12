@@ -17,8 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static bearmaps.proj2c.utils.Constants.SEMANTIC_STREET_GRAPH;
-import static bearmaps.proj2c.utils.Constants.ROUTE_LIST;
+import static bearmaps.proj2c.utils.Constants.*;
 
 /**
  * Handles requests from the web browser for map images. These images
@@ -84,14 +83,87 @@ public class RasterAPIHandler extends APIRouteHandler<Map<String, Double>, Map<S
      */
     @Override
     public Map<String, Object> processRequest(Map<String, Double> requestParams, Response response) {
-        //System.out.println("yo, wanna know the parameters given by the web browser? They are:");
-        //System.out.println(requestParams);
-        Map<String, Object> results = new HashMap<>();
+/*        System.out.println("yo, wanna know the parameters given by the web browser? They are:");
+        System.out.println(requestParams);
         System.out.println("Since you haven't implemented RasterAPIHandler.processRequest, nothing is displayed in "
-                + "your browser.");
-        return results;
-    }
+                + "your browser.");*/
+        Map<String, Object> results = new HashMap<>();
+        double lrlon = requestParams.get("lrlon");
+        double ullon = requestParams.get("ullon");
+        double w = requestParams.get("w");
+        double h = requestParams.get("h");
+        double ullat = requestParams.get("ullat");
+        double lrlat = requestParams.get("lrlat");
+        double LonDPP = (lrlon - ullon) / w;
+        double LatDPP = (lrlat - ullat) / h;
+        double imageLonDPPLevel0 = (ROOT_LRLON - ROOT_ULLON) / TILE_SIZE;
+        boolean query_success = true;
+        //check whether the given query is completely outside of the specified region
+        if (ullat < ROOT_LRLAT || lrlat > ROOT_ULLAT || ullon > ROOT_LRLON ||
+                lrlon < ROOT_ULLON || LonDPP < 0 || LatDPP > 0) {
+            query_success = false;
+        }
+        int depth = 7;
+        for (int i = 2; ; i*=2) {
+            if (imageLonDPPLevel0/(i/2) < LonDPP) {
+                depth = Math.min((int) (Math.log(i/2)/ Math.log(2)), 7);
+                break;
+            }
+        }
 
+        double unitLon = (ROOT_LRLON - ROOT_ULLON) / Math.pow(2, depth);
+        double unitLat = (ROOT_ULLAT - ROOT_LRLAT) / Math.pow(2, depth);
+        double raster_ul_lon = getIndex(ullon, depth, "lon", "ul");
+        double raster_ul_lat = getIndex(ullat, depth, "lat", "ul");
+        double raster_lr_lon = getIndex(lrlon, depth, "lon", "lr");
+        double raster_lr_lat = getIndex(lrlat, depth, "lat", "lr");
+
+        int latLength = (int) Math.round((raster_ul_lat - raster_lr_lat) / unitLat);
+        int lonLength = (int) Math.round((raster_lr_lon - raster_ul_lon) / unitLon);
+        int latStarterIndex = (int) Math.round((ROOT_ULLAT - raster_ul_lat) / unitLat);
+        int lonStarterIndex = (int) Math.round((raster_ul_lon - ROOT_ULLON) / unitLon);
+        String[][] render_grid = new String[latLength][lonLength];
+        for (int i = 0; i < latLength; i++) {
+            for (int j = 0; j < lonLength; j++) {
+                render_grid[i][j] = "d" + depth +
+                        "_x" + (lonStarterIndex + j) +
+                        "_y" + (latStarterIndex + i) +
+                        ".png";
+            }
+        }
+
+        results.put("render_grid", render_grid);
+        results.put("raster_ul_lon", raster_ul_lon);
+        results.put("raster_ul_lat", raster_ul_lat);
+        results.put("raster_lr_lon", raster_lr_lon);
+        results.put("raster_lr_lat", raster_lr_lat);
+        results.put("depth", depth);
+        results.put("query_success", query_success);
+        return results;
+
+    }
+    private double getIndex(double location, int depth, String latOrLon, String corner) {
+        double returnValue;
+        int index;
+        if (latOrLon.equals("lon")) {
+            double unit = (ROOT_LRLON - ROOT_ULLON) / Math.pow(2, depth);
+            index = (int) (Math.floor((location - ROOT_ULLON) / unit));
+            index = Math.max(0, index);
+            index = Math.min(index, (int) Math.pow(2, depth));
+            if (corner.equals("ul")) returnValue = ROOT_ULLON + index * unit;
+            else returnValue = ROOT_ULLON + (index + 1) * unit;
+
+        } else {
+            double unit = (ROOT_ULLAT - ROOT_LRLAT) / Math.pow(2, depth);
+            index = (int) (Math.floor((ROOT_ULLAT - location) / unit));
+            index = Math.max(0, index);
+            index = Math.min(index, (int) Math.pow(2, depth));
+            if (corner.equals("ul")) returnValue = ROOT_ULLAT - index * unit;
+            else returnValue = ROOT_ULLAT - (index + 1) * unit;
+        }
+        return returnValue;
+
+    }
     @Override
     protected Object buildJsonResponse(Map<String, Object> result) {
         boolean rasterSuccess = validateRasteredImgParams(result);
